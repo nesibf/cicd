@@ -1,0 +1,62 @@
+AWS Three Tier Architecture with CI/CD
+
+# Introduction:
+In the world of cloud computing, Amazon Web Services (AWS) stands out as one of the most popular and powerful platforms for developing, deploying, and managing applications. Infrastructure as Code (IaC) enables developers to provision and manage cloud resources using code, ensuring consistency, scalability, and security.
+In this article, we’ll explore a practical example of a Three-Tier Architecture implemented using Terraform — a popular IaC tool and CI/CD implemented using Github Actions and Hashicorp Packer. The code repository we’ll be examining is hosted on GitHub: GitHub Repository
+
+
+## Overview of Three-Tier Architecture:
+The Three-Tier Architecture is a design pattern commonly used in web applications to separate different functional layers. It consists of three main layers:
+
+# Presentation Layer (Load Balancer):
+The first layer is responsible for receiving API requests and distributing them to backend servers in the Application layer (SSL Offloading). In this architecture, Application Load Balancer (ALB) is used to distribute incoming traffic across EC2 instances in the Application layer.
+
+# Application Layer (Backend):
+The second layer contains the business logic and processes user requests. The backend application is deployed using Auto Scaling Groups (ASG) to ensure high availability and manage load fluctuations.
+
+# Data Layer (Database):
+The third layer deals with data storage and management. Amazon Relational Database Service (RDS) instance is used to provide a managed database for the backend application.
+
+
+## Key Services and Features:
+Let’s explore the key services and features of this AWS Architecture:
+
+# Route 53:
+A highly available, scalable, fully managed and Authoritative DNS. The only AWS service which provides 100% availability SLA. It is also a Domain Registrar. Route 53 translates human friendly hostnames into machine IP addresses.
+# Virtual Private Cloud (VPC):
+The foundation of AWS Infrastructure is the VPC, which isolates resources and provides a private network for the application. VPC can be divided into multiple public and private subnets.
+# Internet Gateway (IGW):
+Allows resources (e.g., EC2 instances) in a VPC to connect to the Internet. Internet Gateway scales horizontally and is highly available. One IGW can be attached to only one VPC and vice versa. In order to access the Internet, route tables must also be updated.
+# Application Load Balancer (ALB):
+First launched in 2016, operates on layer 7. Supports HTTP/s, Websocket protocols. Load balances the traffic across resources in target groups. ALB supports cross zone load balancing by default.
+# Elastic Compute Cloud (EC2):
+Virtual machines that hosts the Application logic to serve requests from clients.
+# Auto Scaling Group (ASG):
+The EC2 instances containing application code are deployed in an Auto Scaling Group to maintain availability and scalability. Auto Scaling group can also be used to replace unhealthy instances that fails health check from Application Load Balancer.
+# CloudWatch:
+CloudWatch Alarms can be used to scale in or scale out EC2 instances in Auto Scaling Group based on Average CPU Utilization (Metric) of the instances in the target group. EC2 instances are configured with CloudWatch Unified Agent which send logs to CloudWatch every 60 seconds. Terraform creates a log group in which the logs get collected.
+# Simple Storage Service (S3):
+S3 is one of the very popular offerings from AWS. S3 is highly available and durable object based storage service. S3 allows storing objects (files) in buckets with globally unique name. In this case, we are using S3 to store product images.
+# Relational Database Service (RDS):
+RDS is a managed relational database service by AWS. RDS supports MySql, Oracle, PostgreSQL, MariaDB, Microsoft SQL Server. We are using RDS to host a MySql database. RDS primary instance can have a standby instance in another AZ to failover in case of a disaster (Multi AZ). Standby instance gets replicated in sync with the primary instance.
+
+## Security Considerations:
+# AWS Certificate Manager (ACM):
+Responsible for Managing, Provisioning and deploying TLS certificates. SSL/TLS certificates provides security in transit for HTTP websites (HTTPS). Supports both public and private TLS certificates. Free of charge. ACM is used to load TLS certificates on Application load balancer.
+# Key Management Service (KMS):
+KMS manages Symmetric and Asymmetric encryption keys. Fully integrated with IAM for Authorization and key usage can be fully audited using CloudTrail. In this case, KMS symmetric keys are used to encrypt RDS database and EBS volumes of EC2 instances.
+# Security Groups:
+Security groups act as firewall for the instances. EC2 instances allow traffic only from Application load balancer and RDS Active instance allows traffic only from EC2 instances.
+# IAM ROLE:
+EC2 instances in the public subnets are assigned an IAM role with necessary permissions to access the S3 bucket.
+
+
+## CI/CD:
+CI and CD stand for continuous integration and continuous delivery/continuous deployment. In very simple terms, CI is a modern software development practice in which incremental code changes are made frequently and reliably. The CI/CD pipeline in the above architecture consists of the following:
+# Git:
+Git is a distributed version control system that tracks the changes in your application code. Application code can be committed and pushed to remote cloud version control service like Github.
+# Github Actions:
+Github Actions is a feature of Github that Automates the building, testing and deployment of your application code. When a developer raises a Pull Request, a Github Actions workflow can be triggered to run a series of tests before merging latest code to the repository.
+# Hashicorp Packer:
+Packer is a light weight tool used to build machine images for multiple platforms. A Github Actions workflow can be triggered to use packer to create an Amazon Machine Image (AMI) that consists of the latest application code build along with its dependencies, runtime and CloudWatch unified agent. Workflow then creates a new launch template version with the latest AMI and trigger an instance refresh for the Auto Scaling Group. Auto Scaling Group then replaces the instances in the target group with the latest application code.
+
