@@ -1,8 +1,6 @@
-## CSYE6225- Network Structures and Cloud Computing
+## Network Structures and Cloud Computing
 
-### API code is available on https://github.com/Nagendra-babu-Shakamuri/webapp
-
-https://github.com/NagendraBabuShakamuri/aws-infra/assets/114452317/08618cae-52e7-4609-8225-bfa811d1be72
+### API code is available on https://github.com/nesibf/webapp
 
 ## Assignment 3: Project description 
 
@@ -55,8 +53,3 @@ Following is the command used to import the NameCheap SSL certificate into the A
 ```
 aws acm import-certificate --certificate file://Certificate.pem --certificate-chain file://CertificateChain.pem --private-key file://PrivateKey.pem
 ```
-
-<br>
-Developer - Nagendra babu Shakamuri <br>
-NUID - 002771584 </br>
-Email - shakamuri.n@northeastern.edu
