@@ -60,3 +60,11 @@ Github Actions is a feature of Github that Automates the building, testing and d
 # Hashicorp Packer:
 Packer is a light weight tool used to build machine images for multiple platforms. A Github Actions workflow can be triggered to use packer to create an Amazon Machine Image (AMI) that consists of the latest application code build along with its dependencies, runtime and CloudWatch unified agent. Workflow then creates a new launch template version with the latest AMI and trigger an instance refresh for the Auto Scaling Group. Auto Scaling Group then replaces the instances in the target group with the latest application code.
 
+### NOTE
+    cd cicd
+    git init
+    git add .
+    git commit -m "CI/CD repot"
+    git branch -M main
+    git remote add origin git@github.com:nesibf/cicd.git
+    git push -u origin main
